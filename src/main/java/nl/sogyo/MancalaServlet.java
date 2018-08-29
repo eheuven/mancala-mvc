@@ -1,8 +1,10 @@
 package nl.sogyo;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -30,6 +32,12 @@ public class MancalaServlet extends HttpServlet {
  
        request.setAttribute("vakjeLijst2", vakjeLijst2);
        request.setAttribute("kalaha2",kalaha2);
+
+       /*HttpSession session = request.getSession();
+	   session.setAttribute("vakjeLijst1", vakjeLijst1);
+	   session.setAttribute("kalaha1",kalaha1);
+	   session.setAttribute("vakjeLijst2", vakjeLijst2);
+	   session.setAttribute("kalaha2",kalaha2);*/
        
        RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
        rd.forward(request, response);
@@ -45,5 +53,17 @@ public class MancalaServlet extends HttpServlet {
 	   return vakjeLijst;
    }
     
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	   Enumeration<String> parameterNames = request.getParameterNames();
+	   String paramName = parameterNames.nextElement(); // naam van button in input = BordItem object
+	   
+	   PrintWriter out = response.getWriter();
+	   response.setContentType("text/plain");
+	   out.write(paramName);
+
+	   
+	   out.close();
+
+   }
    
 }

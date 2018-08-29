@@ -39,3 +39,10 @@ body {
 #kalaha{
 	grid-row: span 2;
 }
+
+input[type=submit] {
+  background-color: var(--sogyo-grijs);
+  border: none;
+  text-align: center;
+  font-size: 30px;
+}

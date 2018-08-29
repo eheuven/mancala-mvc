@@ -12,20 +12,22 @@
 		<jsp:useBean id="kalaha1" class="nl.sogyo.mancala.Kalaha" scope="request"/>
 		<jsp:useBean id="kalaha2" class="nl.sogyo.mancala.Kalaha" scope="request"/>
 		
-		<div class="grid-container">
-			<div id = kalaha><jsp:getProperty name="kalaha1" property="aantalStenen"/></div>
-			
-			<c:forEach items="${vakjeLijst1}" var="vakje">
-				<div>${vakje.aantalStenen}</div>
-			</c:forEach>
-			
-			<div id = kalaha><jsp:getProperty name="kalaha2" property="aantalStenen"/></div>
-			
-			<c:forEach items="${vakjeLijst2}" var="vakje">
-				<div>${vakje.aantalStenen}</div>
-			</c:forEach>
-		</div>
-
+		<form action="${pageContext.request.contextPath}/Servlet1" method="post">
+			<div class="grid-container">
+				<div id = kalaha><input type = "submit" name = "${kalaha1}" value = "${kalaha1.aantalStenen}"/></div>
+				<!-- kalaha button zit bovenin ipv gestrekt over 2 rows -->
+				
+				<c:forEach items="${vakjeLijst1}" var="vakje">
+					<div><input type = "submit" name = "${vakje}" value = "${vakje.aantalStenen}"/></div> 
+				</c:forEach>
+				
+				<div id = kalaha><input type = "submit" name = "${kalaha2}" value = "${kalaha2.aantalStenen}"/></div> 
+				
+				<c:forEach items="${vakjeLijst2}" var="vakje">
+					<div><input type = "submit" name = "${vakje}" value = "${vakje.aantalStenen}"/></div> 
+				</c:forEach>
+			</div>
+		</form>
 
 	</body>
 </html>
