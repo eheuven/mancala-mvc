@@ -6,7 +6,7 @@
 
    <servlet>
        <servlet-name>Servlet1</servlet-name>
-       <servlet-class>nl.sogyo.NewPersonServlet</servlet-class>
+       <servlet-class>nl.sogyo.MancalaServlet</servlet-class>
        <load-on-startup>1</load-on-startup>
    </servlet>
 
