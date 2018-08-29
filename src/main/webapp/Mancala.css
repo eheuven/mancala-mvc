@@ -1,0 +1,41 @@
+@charset "ISO-8859-1";
+:root {
+    --sogyo-groen: #007936;
+    --sogyo-lichtgroen: #479C5E;
+    --background: whitesmoke;
+    --sogyo-grijs: #6A6A6A;
+    --sogyo-lichtgrijs: #CDCDCD;
+    --sogyo-rood: #CD241E;
+    --sogyo-lichtrood: #DEADBEEF;
+}
+
+body {
+    background-color: var(--sogyo-lichtgroen);
+    font-family: sans-serif;
+    /*cursor: none;*/
+}
+
+.page {
+    width: 95%;
+    background-color:  var(--background);
+    margin: 10px auto;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(8,50px);
+
+  grid-gap: 10px;
+  background-color: var(--sogyo-lichtgroen);
+  padding: 10px;
+}
+.grid-container > div {
+  background-color: var(--sogyo-grijs);
+  border: 1px solid black;
+  text-align: center;
+  font-size: 30px;
+}
+
+#kalaha{
+	grid-row: span 2;
+}
