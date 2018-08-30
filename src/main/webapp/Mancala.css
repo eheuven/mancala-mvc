@@ -23,26 +23,37 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(8,50px);
-
-  grid-gap: 10px;
+  grid-template-columns: repeat(8,60px);
+  justify-content: center;
+  grid-gap: 20px;
   background-color: var(--sogyo-lichtgroen);
-  padding: 10px;
+  padding: 10px; 
 }
 .grid-container > div {
-  background-color: var(--sogyo-grijs);
-  border: 1px solid black;
   text-align: center;
   font-size: 30px;
+  height: 65px;
+  width: 65px;
+
 }
 
 #kalaha{
 	grid-row: span 2;
+	height: 100%;
 }
 
 input[type=submit] {
   background-color: var(--sogyo-grijs);
-  border: none;
+  border: 2px solid black;
+  border-radius: 40px;
   text-align: center;
   font-size: 30px;
+  height: 100%;
+  width: 100%;
+}
+
+h1{
+	text-align: center;
+}
+	
 }
