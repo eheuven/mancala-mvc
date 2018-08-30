@@ -13,65 +13,91 @@ import nl.sogyo.mancala.*;
 
 public class MancalaServlet extends HttpServlet {
 	
+	int aantalBordInfoItems; 
+	
    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-	   Vakje vakje1 = new Vakje();
-	   ArrayList<Vakje> vakjeLijst1 = maakVakjeLijst(vakje1);
-	   
-	   Kalaha kalaha1 = vakje1.vindKalaha();
-	   
-	   Vakje vakje2 = (Vakje) kalaha1.geefVolgende();
-	   ArrayList<Vakje> vakjeLijst2 = maakVakjeLijst(vakje2);
-	   Kalaha kalaha2 = vakje2.vindKalaha();
-	   
-	   Collections.reverse(vakjeLijst1);
-       HttpSession session = request.getSession();
-	   session.setAttribute("vakjeLijst1", vakjeLijst1);
-	   session.setAttribute("kalaha1",kalaha1);
-	   session.setAttribute("vakjeLijst2", vakjeLijst2);
-	   session.setAttribute("kalaha2",kalaha2);
-       
+	   HttpSession session = request.getSession();
+	   Vakje beginVakje = new Vakje();
+	   session.setAttribute("beginVakje", beginVakje);
+	   maakBord(session, beginVakje);
+	   Message message = maakMessage(beginVakje);
+	   session.setAttribute("message", message);
+
        RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
        rd.forward(request, response);
    }
    
    
-   ArrayList<Vakje> maakVakjeLijst(BordItem loopVakje){
-	   ArrayList<Vakje> vakjeLijst = new ArrayList<>();
-	   while(loopVakje instanceof Vakje) {
-		   vakjeLijst.add((Vakje) loopVakje);
+   private Message maakMessage(Vakje vakje1) {
+	   Message message = new Message();
+	   Speler speler1 = vakje1.geefEigenaar();
+	   Speler speler2 = vakje1.vindKalaha().geefVolgende().geefEigenaar();
+	   
+	   message.setSpeler1Beurt(speler1.isAanDeBeurt());
+	   message.setWinnaars(speler1.isWinaar(), speler2.isWinaar());
+	   message.maakMessage();
+	   return message;
+   }
+
+
+   private ArrayList<BordItemInfo> maakVakjeInfoLijst(BordItem loopVakje){
+	   ArrayList<BordItemInfo> vakjeLijst = new ArrayList<>();
+	   for(int i = 0; loopVakje instanceof Vakje; i++) {
+		   vakjeLijst.add(maakBordItemInfo(loopVakje));
 		   loopVakje = loopVakje.geefVolgende();  
 	   }
 	   return vakjeLijst;
    }
     
-   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-	   Enumeration<String> parameterNames = request.getParameterNames();
-	   String paramName = parameterNames.nextElement(); // naam van button in input = BordItem object
-	   
-	   HttpSession session = request.getSession();
-	   ArrayList<Vakje> vakjeLijst1 = (ArrayList<Vakje>) session.getAttribute("vakjeLijst1");
-	   ArrayList<Vakje> vakjeLijst2 = (ArrayList<Vakje>) session.getAttribute("vakjeLijst2");
-	   
-	   int index1 = vindIndex(paramName,vakjeLijst1);
-	   int index2 = vindIndex(paramName,vakjeLijst2);
-	   
-	   System.out.println(index1);
-	   System.out.println(index2);
-	   
-	   if (index1 != -1) {
-		   vakjeLijst1.get(index1).doeZet();
-	   }else if(index2 != -1) {
-		   vakjeLijst2.get(index2).doeZet();
-	   }
-	   
-
-	   RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
-       rd.forward(request, response);
-
+   private BordItemInfo maakBordItemInfo(BordItem bordItem) {
+	   BordItemInfo item = new BordItemInfo();
+	   item.setAantalStenen(bordItem.getAantalStenen());
+	   item.setItemNr(aantalBordInfoItems);
+	   aantalBordInfoItems ++;
+	   return item;
    }
    
-   int vindIndex(String referenceName, ArrayList<Vakje> vakjeLijst) {
+   
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	   HttpSession session = request.getSession();
+	   Vakje beginVakje = (Vakje) session.getAttribute("beginVakje");
+	   
+	   Enumeration<String> parameterNames = request.getParameterNames();
+	   int vakjeNrGeklikt = Integer.valueOf(parameterNames.nextElement()); // naam van button in input = BordItem object
+	   BordItem gekliktItem = beginVakje.geefVolgende(vakjeNrGeklikt);
+			   
+	   if(gekliktItem instanceof Vakje) {
+		   ((Vakje) gekliktItem).doeZet();
+	   }
+	   
+	   maakBord(session,beginVakje);
+	   
+	   Message message = maakMessage(beginVakje);
+	   session.setAttribute("message", message);
+	   
+	   RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
+       rd.forward(request, response);
+   }
+   
+   private void maakBord(HttpSession session, Vakje beginVakje) {
+	   aantalBordInfoItems = 0;
+	   Vakje vakje2 = (Vakje) beginVakje.vindKalaha().geefVolgende();
+
+	   ArrayList<BordItemInfo> vakjeInfoLijst1 = maakVakjeInfoLijst(beginVakje); 
+	   Collections.reverse(vakjeInfoLijst1); // bovenkant tegen de klok in
+	   BordItemInfo kalaha1 = maakBordItemInfo(beginVakje.vindKalaha());
+	   ArrayList<BordItemInfo> vakjeInfoLijst2 = maakVakjeInfoLijst(vakje2);
+	   BordItemInfo kalaha2 = maakBordItemInfo(vakje2.vindKalaha());
+	 
+	   session.setAttribute("vakjeInfoLijst1", vakjeInfoLijst1);
+	   session.setAttribute("kalaha1",kalaha1);
+	   session.setAttribute("vakjeInfoLijst2", vakjeInfoLijst2);
+	   session.setAttribute("kalaha2",kalaha2);   
+}
+
+
+int vindIndex(String referenceName, ArrayList<Vakje> vakjeLijst) {
 	   for(Vakje vakje: vakjeLijst) {
 		   if(vakje.toString().equals(referenceName)) {
 			   return vakjeLijst.indexOf(vakje);
