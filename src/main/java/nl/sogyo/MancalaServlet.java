@@ -24,20 +24,12 @@ public class MancalaServlet extends HttpServlet {
 	   ArrayList<Vakje> vakjeLijst2 = maakVakjeLijst(vakje2);
 	   Kalaha kalaha2 = vakje2.vindKalaha();
 	   
-	   vakjeLijst1.get(4).doeZet();
-	   
 	   Collections.reverse(vakjeLijst1);
-       request.setAttribute("vakjeLijst1", vakjeLijst1);
-       request.setAttribute("kalaha1",kalaha1);
- 
-       request.setAttribute("vakjeLijst2", vakjeLijst2);
-       request.setAttribute("kalaha2",kalaha2);
-
-       /*HttpSession session = request.getSession();
+       HttpSession session = request.getSession();
 	   session.setAttribute("vakjeLijst1", vakjeLijst1);
 	   session.setAttribute("kalaha1",kalaha1);
 	   session.setAttribute("vakjeLijst2", vakjeLijst2);
-	   session.setAttribute("kalaha2",kalaha2);*/
+	   session.setAttribute("kalaha2",kalaha2);
        
        RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
        rd.forward(request, response);
@@ -57,13 +49,35 @@ public class MancalaServlet extends HttpServlet {
 	   Enumeration<String> parameterNames = request.getParameterNames();
 	   String paramName = parameterNames.nextElement(); // naam van button in input = BordItem object
 	   
-	   PrintWriter out = response.getWriter();
-	   response.setContentType("text/plain");
-	   out.write(paramName);
-
+	   HttpSession session = request.getSession();
+	   ArrayList<Vakje> vakjeLijst1 = (ArrayList<Vakje>) session.getAttribute("vakjeLijst1");
+	   ArrayList<Vakje> vakjeLijst2 = (ArrayList<Vakje>) session.getAttribute("vakjeLijst2");
 	   
-	   out.close();
+	   int index1 = vindIndex(paramName,vakjeLijst1);
+	   int index2 = vindIndex(paramName,vakjeLijst2);
+	   
+	   System.out.println(index1);
+	   System.out.println(index2);
+	   
+	   if (index1 != -1) {
+		   vakjeLijst1.get(index1).doeZet();
+	   }else if(index2 != -1) {
+		   vakjeLijst2.get(index2).doeZet();
+	   }
+	   
 
+	   RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
+       rd.forward(request, response);
+
+   }
+   
+   int vindIndex(String referenceName, ArrayList<Vakje> vakjeLijst) {
+	   for(Vakje vakje: vakjeLijst) {
+		   if(vakje.toString().equals(referenceName)) {
+			   return vakjeLijst.indexOf(vakje);
+		   }
+	   }
+	   return -1;
    }
    
 }

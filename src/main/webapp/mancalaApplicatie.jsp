@@ -7,10 +7,10 @@
 	</head>
 	<body>
 
-		<jsp:useBean id="vakjeLijst1" class="java.util.ArrayList" scope="request"/>
-		<jsp:useBean id="vakjeLijst2" class="java.util.ArrayList" scope="request"/>
-		<jsp:useBean id="kalaha1" class="nl.sogyo.mancala.Kalaha" scope="request"/>
-		<jsp:useBean id="kalaha2" class="nl.sogyo.mancala.Kalaha" scope="request"/>
+		<jsp:useBean id="vakjeLijst1" class="java.util.ArrayList" scope="session"/>
+		<jsp:useBean id="vakjeLijst2" class="java.util.ArrayList" scope="session"/>
+		<jsp:useBean id="kalaha1" class="nl.sogyo.mancala.Kalaha" scope="session"/>
+		<jsp:useBean id="kalaha2" class="nl.sogyo.mancala.Kalaha" scope="session"/>
 		
 		<form action="${pageContext.request.contextPath}/Servlet1" method="post">
 			<div class="grid-container">
