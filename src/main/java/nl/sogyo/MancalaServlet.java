@@ -18,27 +18,21 @@ public class MancalaServlet extends HttpServlet {
    protected void doGet (HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 	   HttpSession session = request.getSession();
-	   Vakje beginVakje = new Vakje();
-	   session.setAttribute("beginVakje", beginVakje);
-	   maakBord(session, beginVakje);
-	   Message message = maakMessage(beginVakje);
-	   session.setAttribute("message", message);
+	   
+	   Vakje beginVakje = new Vakje(); // remove later
+	   
+	   MancalaInfo mancala = new MancalaInfo(beginVakje);
+
+	   maakBord(session, beginVakje);// change
+	   
+	   
+	   session.setAttribute("mancalaInfo", mancala);
+	   session.setAttribute("message", mancala.getMessage());
 
        RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
        rd.forward(request, response);
    }
-   
-   
-   private Message maakMessage(Vakje vakje1) {
-	   Message message = new Message();
-	   Speler speler1 = vakje1.geefEigenaar();
-	   Speler speler2 = vakje1.vindKalaha().geefVolgende().geefEigenaar();
-	   
-	   message.setSpeler1Beurt(speler1.isAanDeBeurt());
-	   message.setWinnaars(speler1.isWinaar(), speler2.isWinaar());
-	   message.maakMessage();
-	   return message;
-   }
+  
 
 
    private ArrayList<BordItemInfo> maakVakjeInfoLijst(BordItem loopVakje){
@@ -73,8 +67,7 @@ public class MancalaServlet extends HttpServlet {
 	   
 	   maakBord(session,beginVakje);
 	   
-	   Message message = maakMessage(beginVakje);
-	   session.setAttribute("message", message);
+	   session.setAttribute("message", mancala.getMessage());
 	   
 	   RequestDispatcher rd = request.getRequestDispatcher("mancalaApplicatie.jsp");
        rd.forward(request, response);
