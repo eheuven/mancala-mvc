@@ -7,20 +7,18 @@ public class Message {
 	private boolean winnaar2;
 	private boolean speler1Beurt;
 	
-	public String getMessage(){
-		return message;
-	}
-
-	void setSpeler1Beurt(boolean beurt) {
+	public Message(boolean beurt, boolean win1, boolean win2){
 		speler1Beurt = beurt;
-	}
-	
-	void setWinnaars(boolean win1, boolean win2) {
 		winnaar1 = win1;
 		winnaar2 = win2;
+		maakMessage();
 	}
 	
-	void maakMessage() {	
+	public String getMessage() {
+		return message;
+	}
+	
+	private void maakMessage() {	
 		if(winnaar1 && winnaar2) {
 			message = "Gelijk spel!";
 		}else if(winnaar1) {

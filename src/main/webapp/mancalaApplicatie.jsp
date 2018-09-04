@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Current Person</title>
+		<title>Mancala spel</title>
 		<link type="text/css" href="Mancala.css" rel="stylesheet"/>
 	</head>
 	<body>
@@ -17,17 +17,16 @@
 		
 		<form action="${pageContext.request.contextPath}/Servlet1" method="post">
 			<div class="grid-container">
-				<div id = kalaha><input type = "submit" name = "${kalaha1.itemNr}" value = "${kalaha1.aantalStenen}"/></div>
-				<!-- kalaha button zit bovenin ipv gestrekt over 2 rows -->
+				<div id = kalaha><button type = "button">${kalaha1.aantalStenen}</button></div>
 				
 				<c:forEach items="${vakjeInfoLijst1}" var="vakje">
-					<div><input type = "submit" name = "${vakje.itemNr}" value = "${vakje.aantalStenen}"/></div> 
+					<div><button type = "submit" name = "vakjeNr" value = "${vakje.itemNr}">${vakje.aantalStenen}</button> </div> 
 				</c:forEach>
 				
-				<div id = kalaha><input type = "submit" name = "${kalaha2.itemNr}" value = "${kalaha2.aantalStenen}"/></div> 
+				<div id = kalaha><button type = "button">${kalaha2.aantalStenen}</button></div> 
 				
 				<c:forEach items="${vakjeInfoLijst2}" var="vakje">
-					<div><input type = "submit" name = "${vakje.itemNr}" value = "${vakje.aantalStenen}"/></div> 
+					<div><button type = "submit" name = "vakjeNr" value = "${vakje.itemNr}">${vakje.aantalStenen}</button></div> 
 				</c:forEach>
 			</div>
 		</form>
